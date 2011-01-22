@@ -6,7 +6,7 @@ CC = gcc
 LINK = gcc
 STRIP = strip
 INSTALL = install
-INSTALL_ARGS = -o root -g wheel -m 4755
+INSTALL_ARGS = -o root -g wheel -m 4755  # Installs with SUID set
 INSTALL_DIR = /usr/local/bin/
 
 -include .depend
