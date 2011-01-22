@@ -35,10 +35,10 @@
 
 #include "config.h"
 
-#define VERSION	"0.2"
+#define VERSION	"0.3"
 
 #define arraysize(a) sizeof(a)/sizeof(a[0])
-#define error(msg) { puts(msg); exit(1);}
+#define error(msg) { printf("ERROR: %s\n",msg); exit(1);}
 
 void brightUp();
 void brightDown();
@@ -51,6 +51,12 @@ void usage();
 int
 main(int argc, char *argv[])
 {
+  if (geteuid()) {
+		usage();
+    error("Must be root");
+    return 1;
+  }
+
 	if (argc > 1) {
 		switch(*argv[1]) {
 			case '+': brightUp(); break;
