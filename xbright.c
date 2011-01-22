@@ -51,11 +51,11 @@ void usage();
 int
 main(int argc, char *argv[])
 {
-  if (geteuid()) {
+	if (geteuid()) {
 		usage();
-    error("Must be root");
-    return 1;
-  }
+		error("Must be root");
+		return 1;
+	}
 
 	if (argc > 1) {
 		switch(*argv[1]) {
