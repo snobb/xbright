@@ -42,6 +42,3 @@ depend:
 .depend: Makefile $(SOURCES) $(HEADERS)
 	@if [ ! -f .depend ]; then touch .depend; fi
 	@makedepend -Y -f .depend  $(SOURCES) 2>/dev/null
-
-test:
-	echo $(OBJECTS)
