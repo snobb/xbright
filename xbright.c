@@ -129,6 +129,7 @@ getCurrent()
 		fgets(output, MAX_REC_LEN, input);
 		if (strstr(output, SRCHSTR) != NULL) break;
 	}
+	close(input);
 
 	strtok(output, " ");
 	char* token = (char*)strtok(NULL, " ");
@@ -137,7 +138,6 @@ getCurrent()
 			current = atoi(token);
 		}
 	}
-	close(input);
 	return current;
 }
 
