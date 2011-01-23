@@ -11,7 +11,7 @@ INSTALL_DIR = /usr/local/bin/
 
 # Autoconfiguration
 BRIGHTNESSFILE=`find /proc/acpi/video/ -iname brightness -exec grep -H current {} \; | awk -F ":" '{ print $$1 }'`
-SRCHSTR=`tail -1 $$(cat .brightness_file.tmp) | awk '{ print $$1 }'`
+SRCHSTR=`head -1 $$(cat .brightness_file.tmp) | awk '{ print $$1 }'`
 LEVELS=`head -1 $$(cat .brightness_file.tmp) | awk '{ print $$2", "$$3", "$$4", "$$5", "$$6", "$$7", "$$8", "$$9 }'`
 
 -include .depend
