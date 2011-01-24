@@ -35,6 +35,7 @@
 
 #include "config.h"
 
+#define NAME 		"xbright"
 #define VERSION	"0.3"
 
 #define arraysize(a) sizeof(a)/sizeof(a[0])
@@ -167,6 +168,6 @@ commitChange(unsigned const int value)
 void
 usage()
 {
-	printf("bright v%s. Alex Kozadaev (c)\n", VERSION);
+	printf("%s v%s. Alex Kozadaev (c)\n",NAME, VERSION);
 	printf("usage: bright [+-=[1-100]]\n");
 }

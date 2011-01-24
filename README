@@ -1,1 +1,9 @@
 Extremely simple alternative to xbacklight (Linux ONLY)
+
+Installation:
+make && sudo make install
+
+Uninstallation:
+sudo make uninstall
+
+
