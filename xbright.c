@@ -61,7 +61,7 @@ main(int argc, char *argv[])
 			case '+': brightUp(); break;
 			case '-': brightDown(); break;
 			case '=': brightSet(argv[1]);break;
-			default: usage(argv[0]);
+			default: usage();
 		}
 	} else {
 		usage();
@@ -94,8 +94,7 @@ brightDown()
 void
 brightSet(const char *value)
 {
-	unsigned int setValue;
-	setValue = atoi(++value);
+	unsigned int setValue = atoi(++value);
 	if ((setValue < 0) || (setValue > MAXVALUE))
 		error("Invalid value");
 #ifdef VERBOSE
