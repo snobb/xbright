@@ -31,14 +31,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "config.h"
 
-#define NAME 		"xbright"
-#define VERSION	"0.3"
+#define NAME		"xbright"
+#define VERSION	"0.4"
 
-#define arraysize(a) sizeof(a)/sizeof(a[0])
 #define error(msg) { printf("ERROR: %s\n",msg); exit(1);}
 
 void brightUp();
@@ -63,7 +61,7 @@ main(int argc, char *argv[])
 			case '+': brightUp(); break;
 			case '-': brightDown(); break;
 			case '=': brightSet(argv[1]);break;
-			default: usage();
+			default: usage(argv[0]);
 		}
 	} else {
 		usage();
@@ -74,72 +72,46 @@ main(int argc, char *argv[])
 void
 brightUp()
 {
-	int i;
 	unsigned int current = getCurrent();
-	for (i=0; i < arraysize(levels); i++) {
-		if (current == levels[i]) break;
-	}
-	if (i == arraysize(levels)-1) i--;
+	unsigned int newValue = (current+1 < MAXVALUE) ? current+1 : MAXVALUE;
 #ifdef VERBOSE
-	printf("New brightness: %d\n", levels[i+1]);
+	printf("New brightness: %d\n", newValue);
 #endif
-	commitChange(levels[i+1]);
+	commitChange(newValue);
 }
 
 void
 brightDown()
 {
-	int i;
 	unsigned int current = getCurrent();
-	for (i=0; i < arraysize(levels); i++) {
-		if (current == levels[i]) break;
-	}
-	if (i == 0) i++;
+	unsigned int newValue = (current > 1) ? current-1 : 0;
 #ifdef VERBOSE
-	printf("New brightness: %d\n", levels[i-1]);
+	printf("New brightness: %u\n", newValue);
 #endif
-	commitChange(levels[i-1]);
+	commitChange(newValue);
 }
 
 void
 brightSet(const char *value)
 {
-	int i, setValue;
+	unsigned int setValue;
 	setValue = atoi(++value);
-	if ((setValue < 1) || (setValue > 100))
+	if ((setValue < 0) || (setValue > MAXVALUE))
 		error("Invalid value");
-	for (i = 0; i < arraysize(levels); i++) {
-		if (setValue <= levels[i]) break;
-	}
 #ifdef VERBOSE
-	printf("New brightness: %d\n", levels[i]);
+	printf("New brightness: %u\n", setValue);
 #endif
-	commitChange(levels[i]);
+	commitChange(setValue);
 }
 
 unsigned int
 getCurrent()
 {
-	char output[MAX_REC_LEN] = "";
-	unsigned int current = 0;
 	FILE* input = fopen(BRIGHTNESSFILE, "r");
 	if (input == NULL)
 		error("Cannot open kernel pipe");
-	while (input != NULL)
-	{
-		fgets(output, MAX_REC_LEN, input);
-		if (strstr(output, SRCHSTR) != NULL) break;
-	}
-	close(input);
-
-	strtok(output, " ");
-	char* token = (char*)strtok(NULL, " ");
-	if (token != NULL) {
-		if (isNumeric(token)) {
-			current = atoi(token);
-		}
-	}
-	return current;
+	char value = fgetc(input);
+	return atoi(&value);
 }
 
 unsigned short
@@ -168,6 +140,6 @@ commitChange(unsigned const int value)
 void
 usage()
 {
-	printf("%s v%s. Alex Kozadaev (c)\n",NAME, VERSION);
-	printf("usage: bright [+-=[1-100]]\n");
+	printf("%s v%s (works only with 2.6+ kernels). Alex Kozadaev (c)\n", NAME, VERSION);
+	printf("usage: %s [+-=[0-%d]]\n", NAME, MAXVALUE);
 }

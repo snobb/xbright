@@ -4,15 +4,15 @@ OBJECTS = $(subst .c$,.o,$(SOURCES))
 HEADERS = $(wildcard *.h)
 CC = gcc
 LINK = gcc
+#CFLAGS = -g -D VERBOSE
 STRIP = strip
 INSTALL = install
 INSTALL_ARGS = -o root -g wheel -m 4755  # Installs with SUID set
 INSTALL_DIR = /usr/local/bin/
 
 # Autoconfiguration
-BRIGHTNESSFILE=`find /proc/acpi/video/ -iname brightness -exec grep -H current {} \; | awk -F ":" '{ print $$1 }'`
-SRCHSTR=`head -1 $$(cat .brightness_file.tmp) | awk '{ print $$1 }'`
-LEVELS=`head -1 $$(cat .brightness_file.tmp) | awk '{ print $$2", "$$3", "$$4", "$$5", "$$6", "$$7", "$$8", "$$9 }'`
+BRIGHTNESSFILE=`find //sys/devices/virtual/backlight | grep "/brightness"`
+MAXVALUE=`find //sys/devices/virtual/backlight -iname max_brightness -exec cat {} \;`
 
 -include .depend
 
@@ -28,12 +28,9 @@ $(TARGET): build_host.h $(OBJECTS)
 build_host.h:
 	@echo -n "Generating configuration: "
 	@echo "#define BUILD_HOST \"`hostname -f`\"" > build_host.h;
-	@echo ${BRIGHTNESSFILE} > .brightness_file.tmp
-	@echo "#define BRIGHTNESSFILE \"`cat .brightness_file.tmp`\"" >> build_host.h
-	@echo "#define SRCHSTR \"${SRCHSTR}\"" >> build_host.h
-	@echo "const unsigned short levels[] = {${LEVELS}};" >> build_host.h
-	@rm -f .brightness_file.tmp
-	@echo "DONE"
+	@echo "#define BRIGHTNESSFILE \"${BRIGHTNESSFILE}\"" >> build_host.h
+	@echo "#define MAXVALUE ${MAXVALUE}" >> build_host.h
+	@echo DONE
 
 install: $(TARGET)
 	$(INSTALL) $(INSTALL_ARGS) $(TARGET) $(INSTALL_DIR)
