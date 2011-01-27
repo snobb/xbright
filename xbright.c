@@ -31,6 +31,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <ctype.h>
 
 #include "config.h"
 
@@ -133,7 +135,7 @@ commitChange(unsigned const int value)
 	if (output == NULL)
 		error("Cannot open kernel pipe");
 	fprintf(output, "%d", value);
-	close(output);
+	fclose(output);
 }
 
 void
