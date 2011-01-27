@@ -4,8 +4,8 @@ OBJECTS = $(subst .c$,.o,$(SOURCES))
 HEADERS = $(wildcard *.h)
 CC = gcc
 LINK = gcc
-#CFLAGS = -g -DVERBOSE
-CFLAGS = -Os -std=c99 -pedantic 
+CFLAGS = -Os -std=c99 -pedantic
+# CFLAGS += -g -DVERBOSE
 STRIP = strip
 INSTALL = install
 INSTALL_ARGS = -o root -g wheel -m 4755  # Installs with SUID set
