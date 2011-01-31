@@ -36,7 +36,7 @@
 #include "config.h"
 
 #define NAME		"xbright"
-#define VERSION	"0.4"
+#define VERSION	"0.41" // bugfix
 
 #define error(msg) { printf("ERROR: %s\n",msg); exit(1);}
 
