@@ -32,7 +32,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <ctype.h>
 
 #include "config.h"
 
@@ -45,7 +44,6 @@ void brightUp();
 void brightDown();
 void brightSet(const char*);
 unsigned int getCurrent();
-unsigned short isNumeric(const char*);
 void commitChange(const unsigned int);
 void usage();
 
@@ -79,18 +77,23 @@ brightUp()
 #ifdef VERBOSE
 	printf("New brightness: %d\n", newValue);
 #endif
-	commitChange(newValue);
+	if (newValue != current)
+		commitChange(newValue);
 }
 
 void
 brightDown()
 {
-	unsigned int current = getCurrent();
-	unsigned int newValue = (current > 1) ? current-1 : 0;
+	unsigned int current, newValue;
+	current = getCurrent();
+	if (current > MAXVALUE) return; // error in getCurrent
+	newValue = (current > 1) ? current-1 : 0;
 #ifdef VERBOSE
 	printf("New brightness: %u\n", newValue);
 #endif
-	commitChange(newValue);
+	
+	if (newValue != current)
+		commitChange(newValue);
 }
 
 void
@@ -112,20 +115,10 @@ getCurrent()
 	if (input == NULL)
 		error("Cannot open kernel pipe");
 	char value = fgetc(input);
+#ifdef VERBOSE
+	printf("Current %d ", atoi(&value));
+#endif
 	return atoi(&value);
-}
-
-unsigned short
-isNumeric(const char *p)
-{
-	if (*p) {
-		char c;
-		while ((c=*p++) && (c != '\n')) {
-			if (!isdigit(c)) return 0;
-		}
- 		return 1;
-	}
-	return 0;
 }
 
 void
