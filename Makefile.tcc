@@ -2,11 +2,10 @@ TARGET = xbright
 SOURCES = $(wildcard *.c)
 OBJECTS = $(subst .c$,.o,$(SOURCES))
 HEADERS = $(wildcard *.h)
-CC = gcc
-LINK = gcc
-CFLAGS = -Os -std=c99 -pedantic
+CC = tcc
+LINK = tcc
+CFLAGS = -Wall
 # CFLAGS += -g -DVERBOSE
-STRIP = strip
 INSTALL = install
 INSTALL_ARGS = -o root -g wheel -m 4755  # Installs with SUID set
 INSTALL_DIR = /usr/local/bin/
@@ -19,7 +18,6 @@ MAXVALUE=`find //sys/devices/virtual/backlight -iname max_brightness -exec cat {
 
 $(TARGET): build_host.h $(OBJECTS)
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBPATH) $(LIBS)
-	$(STRIP) $(TARGET)
 
 .c.o: $*.h common.h
 	$(CC) -c $(CFLAGS) $(DEBUGFLAGS) $(INCPATH) -o $@ $<
