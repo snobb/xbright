@@ -36,16 +36,16 @@
 #include "config.h"
 
 #define NAME		"xbright"
-#define VERSION	"0.41" // bugfix
+#define VERSION	"0.42" // bugfix
 
-#define error(msg) { printf("ERROR: %s\n",msg); exit(1);}
+#define error(msg) { printf("ERROR: %s\n",(msg)); exit(1);}
 
-void brightUp();
-void brightDown();
+void brightUp(void);
+void brightDown(void);
 void brightSet(const char*);
-unsigned int getCurrent();
+unsigned int getCurrent(void);
 void commitChange(const unsigned int);
-void usage();
+void usage(void);
 
 int
 main(int argc, char *argv[])
@@ -70,7 +70,7 @@ main(int argc, char *argv[])
 }
 
 void
-brightUp()
+brightUp(void)
 {
 	unsigned int current = getCurrent();
 	unsigned int newValue = (current+1 < MAXVALUE) ? current+1 : MAXVALUE;
@@ -82,7 +82,7 @@ brightUp()
 }
 
 void
-brightDown()
+brightDown(void)
 {
 	unsigned int current, newValue;
 	current = getCurrent();
@@ -109,7 +109,7 @@ brightSet(const char *value)
 }
 
 unsigned int
-getCurrent()
+getCurrent(void)
 {
 	FILE* input = fopen(BRIGHTNESSFILE, "r");
 	if (input == NULL)
@@ -132,7 +132,7 @@ commitChange(unsigned const int value)
 }
 
 void
-usage()
+usage(void)
 {
 	printf("%s v%s (works only with 2.6+ kernels). Alex Kozadaev (c)\n", NAME, VERSION);
 	printf("usage: %s [+-=[0-%d]]\n", NAME, MAXVALUE);

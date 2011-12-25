@@ -12,8 +12,9 @@ INSTALL_ARGS = -o root -g wheel -m 4755  # Installs with SUID set
 INSTALL_DIR = /usr/local/bin/
 
 # Autoconfiguration
-BRIGHTNESSFILE=`find //sys/devices/virtual/backlight | grep "/brightness"`
-MAXVALUE=`find //sys/devices/virtual/backlight -iname max_brightness -exec cat {} \;`
+BRIGHTNESSFILE=`find /sys/devices/|grep "/brightness"| tail -1`
+MAXVALUE=`find /sys/devices/ -iname max_brightness -exec cat {} \; | tail -1`
+
 
 -include .depend
 
