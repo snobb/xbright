@@ -111,14 +111,15 @@ brightSet(const char *value)
 unsigned int
 getCurrent(void)
 {
+	int value;
 	FILE* input = fopen(BRIGHTNESSFILE, "r");
 	if (input == NULL)
 		error("Cannot open kernel pipe");
-	char value = fgetc(input);
+	fscanf(input, "%d", &value);
 #ifdef VERBOSE
-	printf("Current %d ", atoi(&value));
+	printf("Current %d ", value);
 #endif
-	return atoi(&value);
+	return value;
 }
 
 void
