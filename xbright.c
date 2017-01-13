@@ -1,6 +1,6 @@
 //      xbright.c
 //
-//      Copyright 2011 Alex Kozadaev <akozadaev at yahoo dot com>
+//      Copyright 2011-2017 Alex Kozadaev <akozadaev at yahoo dot com>
 //
 //      Redistribution and use in source and binary forms, with or without
 //      modification, are permitted provided that the following conditions are
@@ -33,10 +33,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "config.h"
+#include "build_host.h"
 
 #define NAME    "xbright"
-#define VERSION "0.42" // bugfix
 
 #define error(msg) { printf("ERROR: %s\n",(msg)); exit(1);}
 

@@ -1,6 +1,6 @@
 XBright
 =======
-Extremely simple alternative to xbacklight made that uses new /sys/... instead of /proc/... (Linux 2.6+ ONLY)
+Extremely simple alternative to xbacklight made that uses new /sys/class/backlight/... (Linux 2.6+ ONLY)
 Made even simplier and smaller
 
 Usage:
