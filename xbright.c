@@ -9,105 +9,103 @@
 
 #include "build_host.h"
 
-#define NAME    "xbright"
+#define NAME            "xbright"
 
-#define error(msg) { printf("ERROR: %s\n",(msg)); exit(1);}
+#define ERROR(msg)      { fprintf(stderr, "ERROR: %s - %s\n", __func__, \
+                            (msg)); exit(EXIT_FAILURE); } while(0)
+#define MIN(a, b)       ((a) < (b) ? (a) : (b))
+#define MAX(a, b)       ((a) > (b) ? (a) : (b))
 
-void brightUp(void);
-void brightDown(void);
-void brightSet(const char*);
-unsigned int getCurrent(void);
-void commitChange(const unsigned int);
-void usage(void);
+static void bright_up(void);
+static void bright_down(void);
+static void bright_set(const char*);
+static int get_current(void);
+static void commit_change(int);
+static void usage(void);
 
 int
-main(int argc, char *argv[])
+main(int argc, char **argv)
 {
     if (geteuid()) {
         usage();
-        error("Must be root");
+        ERROR("Must be root");
         return 1;
     }
 
     if (argc > 1) {
         switch(*argv[1]) {
-            case '+': brightUp(); break;
-            case '-': brightDown(); break;
-            case '=': brightSet(argv[1]);break;
+            case '+': bright_up(); break;
+            case '-': bright_down(); break;
+            case '=': bright_set(argv[1]); break;
             default: usage();
         }
     } else {
         usage();
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void
-brightUp(void)
+bright_up(void)
 {
-    unsigned int current = getCurrent();
-    unsigned int newValue = (current+1 < MAXVALUE) ? current+1 : MAXVALUE;
-#ifdef VERBOSE
-    printf("New brightness: %d\n", newValue);
-#endif
-    if (newValue != current) {
-        commitChange(newValue);
+    int cur_value = get_current();
+    int new_value = MIN(cur_value + 1, MAXVALUE);
+
+    if (new_value != cur_value) {
+        commit_change(new_value);
     }
 }
 
 void
-brightDown(void)
+bright_down(void)
 {
-    unsigned int current, newValue;
-    current = getCurrent();
-    if (current > MAXVALUE) {
-        return;  /* error in getCurrent */
-    }
-    newValue = (current > 1) ? current-1 : 0;
-#ifdef VERBOSE
-    printf("New brightness: %u\n", newValue);
-#endif
+    int cur_value = get_current();
+    int new_value = MAX(cur_value - 1, 0);
 
-    if (newValue != current) {
-        commitChange(newValue);
+    if (new_value != cur_value) {
+        commit_change(new_value);
     }
 }
 
 void
-brightSet(const char *value)
+bright_set(const char *value)
 {
-    unsigned int setValue = atoi(++value);
-    if ((setValue < 0) || (setValue > MAXVALUE)) {
-        error("Invalid value");
+    int set_value = atoi(++value);
+    if ((set_value < 0) || (set_value > MAXVALUE)) {
+        ERROR("Invalid value");
     }
-#ifdef VERBOSE
-    printf("New brightness: %u\n", setValue);
-#endif
-    commitChange(setValue);
+    commit_change(set_value);
 }
 
-unsigned int
-getCurrent(void)
+int
+get_current(void)
 {
-    int value;
+    int value = 0;
     FILE* input = fopen(BRIGHTNESSFILE, "r");
     if (input == NULL) {
-        error("Cannot open kernel pipe");
+        ERROR("Cannot open kernel pipe");
     }
     fscanf(input, "%d", &value);
-#ifdef VERBOSE
+
+#ifdef DEBUG
     printf("Current %d ", value);
 #endif
+
     return value;
 }
 
 void
-commitChange(unsigned const int value)
+commit_change(int value)
 {
     FILE* output = fopen(BRIGHTNESSFILE, "w");
     if (output == NULL) {
-        error("Cannot open kernel pipe");
+        ERROR("Cannot open kernel pipe");
     }
+
+#ifdef DEBUG
+    fprintf(stderr, "new brightness: %d\n", value);
+#endif
+
     fprintf(output, "%d", value);
     fclose(output);
 }
