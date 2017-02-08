@@ -16,8 +16,8 @@
 #define MIN(a, b)       ((a) < (b) ? (a) : (b))
 #define MAX(a, b)       ((a) > (b) ? (a) : (b))
 
-static void bright_up(void);
-static void bright_down(void);
+static void bright_up(const char*);
+static void bright_down(const char*);
 static void bright_set(const char*);
 static int get_current(void);
 static void commit_change(int);
@@ -34,8 +34,8 @@ main(int argc, char **argv)
 
     if (argc > 1) {
         switch(*argv[1]) {
-            case '+': bright_up(); break;
-            case '-': bright_down(); break;
+            case '+': bright_up(argv[1]); break;
+            case '-': bright_down(argv[1]); break;
             case '=': bright_set(argv[1]); break;
             default: usage();
         }
@@ -46,10 +46,11 @@ main(int argc, char **argv)
 }
 
 void
-bright_up(void)
+bright_up(const char * value)
 {
+    int offset_value = atoi(++value);
     int cur_value = get_current();
-    int new_value = MIN(cur_value + 1, MAXVALUE);
+    int new_value = MIN(cur_value + offset_value, MAXVALUE);
 
     if (new_value != cur_value) {
         commit_change(new_value);
@@ -57,10 +58,11 @@ bright_up(void)
 }
 
 void
-bright_down(void)
+bright_down(const char * value)
 {
+    int offset_value = atoi(++value);
     int cur_value = get_current();
-    int new_value = MAX(cur_value - 1, 0);
+    int new_value = MAX(cur_value - offset_value, 0);
 
     if (new_value != cur_value) {
         commit_change(new_value);
