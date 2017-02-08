@@ -34,9 +34,9 @@ main(int argc, char **argv)
 
     if (argc > 1) {
         switch(*argv[1]) {
-            case '+': bright_up(argv[1]); break;
-            case '-': bright_down(argv[1]); break;
-            case '=': bright_set(argv[1]); break;
+            case '+': bright_up(++argv[1]); break;
+            case '-': bright_down(++argv[1]); break;
+            case '=': bright_set(++argv[1]); break;
             default: usage();
         }
     } else {
@@ -46,9 +46,9 @@ main(int argc, char **argv)
 }
 
 void
-bright_up(const char * value)
+bright_up(const char *value)
 {
-    int offset_value = atoi(++value);
+    int offset_value = MAX(atoi(value), 1);
     int cur_value = get_current();
     int new_value = MIN(cur_value + offset_value, MAXVALUE);
 
@@ -58,9 +58,9 @@ bright_up(const char * value)
 }
 
 void
-bright_down(const char * value)
+bright_down(const char *value)
 {
-    int offset_value = atoi(++value);
+    int offset_value = MAX(atoi(value), 1);
     int cur_value = get_current();
     int new_value = MAX(cur_value - offset_value, 0);
 
@@ -72,7 +72,7 @@ bright_down(const char * value)
 void
 bright_set(const char *value)
 {
-    int set_value = atoi(++value);
+    int set_value = atoi(value);
     if ((set_value < 0) || (set_value > MAXVALUE)) {
         ERROR("Invalid value");
     }
@@ -90,7 +90,7 @@ get_current(void)
     fscanf(input, "%d", &value);
 
 #ifdef DEBUG
-    printf("Current %d ", value);
+    printf("Current %d\n", value);
 #endif
 
     return value;
