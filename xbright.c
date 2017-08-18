@@ -9,10 +9,16 @@
 
 #include "build_host.h"
 
-#define NAME            "xbright"
+#define NAME "xbright"
 
 #define ERROR(msg)      { fprintf(stderr, "ERROR: %s - %s\n", __func__, \
                             (msg)); exit(EXIT_FAILURE); } while(0)
+#ifdef DEBUG
+#define DBG(fmt, ...) fprintf(stderr, fmt "\n", __VA_ARGS__);
+#else
+#define DBG(fmt, ...)
+#endif
+
 #define MIN(a, b)       ((a) < (b) ? (a) : (b))
 #define MAX(a, b)       ((a) > (b) ? (a) : (b))
 
@@ -88,11 +94,7 @@ get_current(void)
         ERROR("Cannot open kernel pipe");
     }
     fscanf(input, "%d", &value);
-
-#ifdef DEBUG
-    printf("Current %d\n", value);
-#endif
-
+    DBG("current value: %d", value);
     return value;
 }
 
@@ -103,11 +105,7 @@ commit_change(int value)
     if (output == NULL) {
         ERROR("Cannot open kernel pipe");
     }
-
-#ifdef DEBUG
-    fprintf(stderr, "new brightness: %d\n", value);
-#endif
-
+    DBG("new value: %d", value);
     fprintf(output, "%d", value);
     fclose(output);
 }

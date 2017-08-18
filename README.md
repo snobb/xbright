@@ -1,7 +1,6 @@
 XBright
 =======
-Extremely simple alternative to xbacklight made that uses new /sys/class/backlight/... (Linux 2.6+ ONLY)
-Made even simplier and smaller
+Extremely simple and lightweight alternative to xbacklight that uses /sys/class/backlight/... (Linux 2.6+ ONLY)
 
 Usage:
 ------
@@ -11,9 +10,14 @@ Usage:
 
 Installation:
 -------------
+The program is auto-configured during make
+```bash
 make && sudo make install
+```
 
 Uninstallation:
 ---------------
+```bash
 sudo make uninstall
+```
 
