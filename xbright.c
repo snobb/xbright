@@ -69,7 +69,10 @@ bright_down(const char *value)
     int offset_value = MAX(atoi(value), 1);
     int cur_value = get_current();
     int new_value = MAX(cur_value - offset_value, 0);
+    if (new_value < MINVALUE) {
+        ERROR("Error: Cant go below 5");
 
+    }
     if (new_value != cur_value) {
         commit_change(new_value);
     }

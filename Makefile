@@ -18,7 +18,7 @@ endif
 # Auto-configuration
 BRIGHTNESSFILE=$(shell find /sys/class/backlight/*/brightness | head -1)
 MAXVALUE=$(shell find /sys/class/backlight/*/max_brightness | head -1 | xargs cat)
-
+MINVALUE=5
 # version info from git
 REVCNT          := $(shell git rev-list --count master 2>/dev/null)
 ifeq ($(REVCNT),)
@@ -46,6 +46,7 @@ $(BUILD_HOST):
 	@echo "#define BRIGHTNESSFILE \"$(BRIGHTNESSFILE)\"" >> $(BUILD_HOST)
 	@echo "#define MAXVALUE $(MAXVALUE)"                 >> $(BUILD_HOST)
 	@echo "#define VERSION \"$(VERSION)\""               >> $(BUILD_HOST)
+	@echo "#define MINVALUE $(MINVALUE)"               >> $(BUILD_HOST)
 
 $(TARGET): $(BUILD_HOST) $(OBJ)
 	$(CC) $(LFLAGS) -o $@ $(OBJ)
