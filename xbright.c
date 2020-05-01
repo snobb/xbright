@@ -78,10 +78,7 @@ bright_down(const char *value)
 void
 bright_set(const char *value)
 {
-    int set_value = atoi(value);
-    if ((set_value < 0) || (set_value > MAXVALUE)) {
-        ERROR("Invalid value");
-    }
+    int set_value = MIN(atoi(value), MAXVALUE);
     commit_change(set_value);
 }
 
