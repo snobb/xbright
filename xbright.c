@@ -1,6 +1,6 @@
 /*
  *  xbright.c
- *  author: Alex Kozadaev (2011-2017)
+ *  author: Alex Kozadaev (2011-2021)
  */
 
 #include <stdio.h>
