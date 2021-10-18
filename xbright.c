@@ -90,7 +90,7 @@ get_current(void)
     if (input == NULL) {
         ERROR("Cannot open kernel pipe");
     }
-    fscanf(input, "%d", &value);
+    (void)fscanf(input, "%d", &value);
     DBG("current value: %d", value);
     return value;
 }
