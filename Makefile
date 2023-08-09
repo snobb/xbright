@@ -62,7 +62,7 @@ clean:
 	-rm -f $(TARGET)
 	-rm -rf ./$(OBJDIR)
 
-install: release
+install:
 	$(INSTALL) $(INSTALL_ARGS) $(TARGET) $(INSTALL_DIR)
 	@echo "DONE"
 
