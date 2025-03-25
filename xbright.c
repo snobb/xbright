@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "build_host.h"
@@ -73,9 +74,18 @@ void bright_down(const char *value) {
     }
 }
 
-void bright_set(const char *value) {
-    int set_value = MIN(atoi(value), STEPS);
-    commit_change(set_value * STEP);
+void
+bright_set(const char *value)
+{
+    int offset;
+
+    if (strlen(value) == 0) {
+        offset = MAXVALUE;
+    } else {
+        offset = MIN(atoi(value), MAXVALUE);
+    }
+
+    commit_change(offset);
 }
 
 int get_current(void) {
