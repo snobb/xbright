@@ -1,6 +1,6 @@
 /*
  *  xbright.c
- *  author: Alex Kozadaev (2011-Present)
+ *  author: Aleksei Kozadaev (2011-Present)
  */
 
 #include <stdio.h>
@@ -74,9 +74,7 @@ void bright_down(const char *value) {
     }
 }
 
-void
-bright_set(const char *value)
-{
+void bright_set(const char *value) {
     int offset;
 
     if (strlen(value) == 0) {

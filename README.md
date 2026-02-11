@@ -16,9 +16,10 @@ The program is auto-configured during make
 make && sudo make install
 ```
 
+**NOTE**: Because the tool gets auto-configured during the build, it's not practical to package it or move the binary between different machines.
+
 Uninstallation:
 ---------------
 ```bash
 sudo make uninstall
 ```
-
